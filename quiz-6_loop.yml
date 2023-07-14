@@ -1,0 +1,56 @@
+- name: Create users in managed1
+  hosts: managed1
+  become: true
+
+  tasks:
+    - name: Include managed1 host variables
+      include_vars:
+        file: group_vars/managed1-host-r00txtr1.yml
+
+    - name: Decrypt secret.yml
+      vars:
+        secret_files:
+          - secret.yml
+      include_vars: "{{ item }}"
+      loop: "{{ secret_files }}"
+
+    - name: Create users ops[1-50]
+      user:
+        name: "{{ item }}"
+        password: "{{ pass | password_hash('sha512') }}"
+      loop: "{{ list_user_ops_managed1 }}"
+
+    - name: Create users dev[1-50]
+      user:
+        name: "{{ item }}"
+        password: "{{ pass | password_hash('sha512') }}"
+      loop: "{{ list_user_dev_managed1 }}"
+
+- name: Create users in managed2
+  hosts: managed2
+  become: true
+
+  tasks:
+    - name: Include managed2 host variables
+      include_vars:
+        file: group_vars/managed2-host-r00txtr1.yml
+
+    - name: Decrypt secret.yml
+      vars:
+        secret_files:
+          - secret.yml
+      include_vars: "{{ item }}"
+      loop: "{{ secret_files }}"
+
+    - name: Create users ops[51-100]
+      user:
+        name: "{{ item }}"
+        password: "{{ pass | password_hash('sha512') }}"
+      loop: "{{ list_user_ops_managed2 }}"
+
+    - name: Create users dev[51-100]
+      user:
+        name: "{{ item }}"
+        password: "{{ pass | password_hash('sha512') }}"
+      loop: "{{ list_user_dev_managed2 }}"
+
