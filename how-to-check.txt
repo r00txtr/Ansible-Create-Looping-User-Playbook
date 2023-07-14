@@ -1,0 +1,1 @@
+for i in {1..50}; do sshpass -p adinusa88 ssh dev50@pod-username-managed1 whoami
